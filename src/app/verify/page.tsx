@@ -11,11 +11,13 @@ import { AiVerifier } from "@/components/ai-verifier";
 
 interface Certificate {
   txId: string;
+  studentId: string;
   studentName: string;
   degree: string;
   institution: string;
   date: string;
   status: string;
+  grade?: string;
 }
 
 type VerificationStatus = "idle" | "loading" | "found" | "not-found";
@@ -116,6 +118,7 @@ export default function VerifyPage() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="text-sm text-green-900 space-y-2">
+                       <p><strong>Student ID:</strong> {foundCertificate.studentId}</p>
                        <p><strong>Student:</strong> {foundCertificate.studentName}</p>
                        <p><strong>Degree:</strong> {foundCertificate.degree}</p>
                        <p><strong>Institution:</strong> {foundCertificate.institution}</p>

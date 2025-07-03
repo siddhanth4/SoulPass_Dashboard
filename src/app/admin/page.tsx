@@ -39,6 +39,7 @@ export default function AdminPage() {
   function onSubmit(values: FormValues) {
     const newCertificate = {
       txId: `0x${crypto.randomUUID().replace(/-/g, '')}`,
+      studentId: values.studentId,
       studentName: values.studentName,
       degree: values.courseName,
       institution: values.institution,
@@ -51,8 +52,8 @@ export default function AdminPage() {
       const existingCertsRaw = localStorage.getItem("certificates");
       // Use the initial list if local storage is empty, to keep the demo data
       const initialCerts = [
-        { txId: "0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t", studentName: "Alice Johnson", degree: "B.S. in Computer Science", institution: "Firebase University", date: "2023-10-26", status: "Verified" },
-        { txId: "0x4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1a2b3c", studentName: "Bob Williams", degree: "M.A. in Digital Arts", institution: "Google Tech", date: "2023-10-25", status: "Verified" },
+        { txId: "0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t", studentId: "111222333", studentName: "Alice Johnson", degree: "B.S. in Computer Science", institution: "Firebase University", date: "2023-10-26", status: "Verified", grade: "A+" },
+        { txId: "0x4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1a2b3c", studentId: "444555666", studentName: "Bob Williams", degree: "M.A. in Digital Arts", institution: "Google Tech", date: "2023-10-25", status: "Verified", grade: "A" },
       ];
       const existingCerts = existingCertsRaw ? JSON.parse(existingCertsRaw) : initialCerts;
       const updatedCerts = [newCertificate, ...existingCerts];

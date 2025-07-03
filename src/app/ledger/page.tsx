@@ -18,61 +18,75 @@ import { GanttChartSquare, FileQuestion } from 'lucide-react'
 const initialCertificates = [
   {
     txId: "0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t",
+    studentId: "111222333",
     studentName: "Alice Johnson",
     degree: "B.S. in Computer Science",
     institution: "Firebase University",
     date: "2023-10-26",
     status: "Verified",
+    grade: "A+",
   },
   {
     txId: "0x4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1a2b3c",
+    studentId: "444555666",
     studentName: "Bob Williams",
     degree: "M.A. in Digital Arts",
     institution: "Google Tech",
     date: "2023-10-25",
     status: "Verified",
+    grade: "A",
   },
   {
     txId: "0x7g8h9i0j1k2l3m4n5o6p7q8r9s0t1a2b3c4d5e6f",
+    studentId: "777888999",
     studentName: "Charlie Brown",
     degree: "Ph.D. in Physics",
     institution: "Firebase University",
     date: "2023-10-22",
     status: "Verified",
+    grade: "B+",
   },
   {
     txId: "0xj1k2l3m4n5o6p7q8r9s0t1a2b3c4d5e6f7g8h9i",
+    studentId: "123123123",
     studentName: "Diana Prince",
     degree: "B.A. in Journalism",
     institution: "Metropolis University",
     date: "2023-09-15",
     status: "Verified",
+    grade: "A-",
   },
   {
     txId: "0xm4n5o6p7q8r9s0t1a2b3c4d5e6f7g8h9i0j1k2l",
+    studentId: "456456456",
     studentName: "Eve Adams",
     degree: "Certificate in Cloud Engineering",
     institution: "Google Tech",
     date: "2023-09-01",
     status: "Verified",
+    grade: "Pass",
   },
    {
     txId: "0xp7q8r9s0t1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o",
+    studentId: "789789789",
     studentName: "Frank Miller",
     degree: "B.S. in Electrical Engineering",
     institution: "Firebase University",
     date: "2023-08-11",
     status: "Verified",
+    grade: "B",
   },
 ];
 
 interface Certificate {
   txId: string;
+  studentId: string;
   studentName: string;
   degree: string;
   institution: string;
   date: string;
   status: string;
+  grade?: string;
 }
 
 export default function LedgerPage() {
@@ -81,8 +95,10 @@ export default function LedgerPage() {
   useEffect(() => {
     try {
       const storedCertsRaw = localStorage.getItem("certificates");
-      if (storedCertsRaw) {
-        setCertificates(JSON.parse(storedCertsRaw));
+      const storedCerts = storedCertsRaw ? JSON.parse(storedCertsRaw) : [];
+
+      if (storedCerts.length > 0 && storedCerts[0].studentId) {
+        setCertificates(storedCerts);
       } else {
         setCertificates(initialCertificates);
         localStorage.setItem("certificates", JSON.stringify(initialCertificates));
