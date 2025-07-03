@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -10,9 +13,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import Link from 'next/link'
-import { GanttChartSquare } from 'lucide-react'
+import { GanttChartSquare, FileQuestion } from 'lucide-react'
 
-const certificates = [
+const initialCertificates = [
   {
     txId: "0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t",
     studentName: "Alice Johnson",
@@ -63,7 +66,33 @@ const certificates = [
   },
 ];
 
+interface Certificate {
+  txId: string;
+  studentName: string;
+  degree: string;
+  institution: string;
+  date: string;
+  status: string;
+}
+
 export default function LedgerPage() {
+  const [certificates, setCertificates] = useState<Certificate[]>([]);
+
+  useEffect(() => {
+    try {
+      const storedCertsRaw = localStorage.getItem("certificates");
+      if (storedCertsRaw) {
+        setCertificates(JSON.parse(storedCertsRaw));
+      } else {
+        setCertificates(initialCertificates);
+        localStorage.setItem("certificates", JSON.stringify(initialCertificates));
+      }
+    } catch (error) {
+      console.error("Could not load certificates from localStorage", error);
+      setCertificates(initialCertificates);
+    }
+  }, []);
+
   return (
     <div className="container py-10">
       <Card className="shadow-lg">
@@ -80,40 +109,48 @@ export default function LedgerPage() {
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="min-w-[250px]">Transaction ID</TableHead>
-                  <TableHead>Student Name</TableHead>
-                  <TableHead>Degree/Course</TableHead>
-                  <TableHead>Institution</TableHead>
-                  <TableHead>Issue Date</TableHead>
-                  <TableHead className="text-center">Status</TableHead>
-                  <TableHead className="text-right">Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {certificates.map((cert) => (
-                  <TableRow key={cert.txId}>
-                    <TableCell className="font-mono text-xs truncate">{cert.txId}</TableCell>
-                    <TableCell className="font-medium">{cert.studentName}</TableCell>
-                    <TableCell>{cert.degree}</TableCell>
-                    <TableCell>{cert.institution}</TableCell>
-                    <TableCell>{cert.date}</TableCell>
-                    <TableCell className="text-center">
-                      <Badge variant="default" className="bg-green-600 text-green-50 hover:bg-green-700">
-                        {cert.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Button asChild variant="outline" size="sm">
-                         <Link href={`/verify?id=${cert.txId}`}>Verify</Link>
-                      </Button>
-                    </TableCell>
+            {certificates.length > 0 ? (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="min-w-[250px]">Transaction ID</TableHead>
+                    <TableHead>Student Name</TableHead>
+                    <TableHead>Degree/Course</TableHead>
+                    <TableHead>Institution</TableHead>
+                    <TableHead>Issue Date</TableHead>
+                    <TableHead className="text-center">Status</TableHead>
+                    <TableHead className="text-right">Action</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {certificates.map((cert) => (
+                    <TableRow key={cert.txId}>
+                      <TableCell className="font-mono text-xs truncate max-w-xs">{cert.txId}</TableCell>
+                      <TableCell className="font-medium">{cert.studentName}</TableCell>
+                      <TableCell>{cert.degree}</TableCell>
+                      <TableCell>{cert.institution}</TableCell>
+                      <TableCell>{cert.date}</TableCell>
+                      <TableCell className="text-center">
+                        <Badge variant="default" className="bg-green-600 text-green-50 hover:bg-green-700">
+                          {cert.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button asChild variant="outline" size="sm">
+                           <Link href={`/verify?id=${cert.txId}`}>Verify</Link>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+               <div className="text-center py-10 text-muted-foreground">
+                 <FileQuestion className="mx-auto h-12 w-12" />
+                 <p className="mt-4">No certificates found in the ledger.</p>
+                 <p className="text-sm">Certificates issued by an admin will appear here.</p>
+               </div>
+            )}
           </div>
         </CardContent>
       </Card>
