@@ -11,6 +11,7 @@ const navLinks = [
   { href: "/admin", label: "Admin" },
   { href: "/student", label: "Student" },
   { href: "/verify", label: "Verify" },
+  { href: "/ledger", label: "Ledger" },
 ];
 
 export function Header() {

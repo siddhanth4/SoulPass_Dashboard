@@ -19,10 +19,10 @@ export default function Home() {
             </div>
             <div className="space-x-4">
               <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                <Link href="/verify">Verify a Certificate</Link>
+                <Link href="/admin">Issue a Certificate</Link>
               </Button>
               <Button asChild variant="outline" size="lg">
-                <Link href="/student">Student Portal</Link>
+                <Link href="/ledger">View Public Ledger</Link>
               </Button>
             </div>
           </div>
